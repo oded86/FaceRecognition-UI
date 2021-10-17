@@ -1,0 +1,112 @@
+
+<html>
+	<head>
+		<title>{{ title }}</title>
+		<style>
+		 .cameras {background-color: lightblue;text-align: center;}
+		 .camera {display: inline-block;}
+		 .myDiv {
+			  margin: 0px 00px 0px 10px;
+			  float: left;
+			  width: 250px;
+			  height: 500px;
+			  border: 1px dashed #090;
+			  background-color: #cfc;
+              overflow-x: hidden;
+              overflow-y: auto;
+              text-align:justify;
+		  }
+
+		 .camera_found_prisoner {display: inline-block;border:1px solid red;}
+		 .camera_found_guard {display: inline-block;border:1px solid green;}
+		 .camera_found_unknown {display: inline-block;border:1px solid yellow;}
+		 .heading_off {}
+		 .heading_on {background:url('{{ url_for('static', filename = 'images/vid.png') }}'}
+
+		</style>
+		<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+		<script lang="javascript">
+			var checkImage = false;
+			var listvalues = [];
+			function refreshCameras() {
+			if (checkImage == true){
+  				$('.camera img').attr('src', function(i, old) { return old.replace(/\?.+/,"?i=" + (Math.random()*1000)); });
+  				$('#news').append("* Checking<br/>" );
+  			}
+				//$('.camera img').attr('src', function(i, old) { return old.replace(/\?.+/,"?i=" + (Math.random()*1000)); });
+  				setTimeout(refreshCameras, 1000);
+			}
+			function refreshCamerasFirst() {
+  				$('.camera img').attr('src', function(i, old) { return old + "?i=" + (Math.random()*1000); });
+  				setTimeout(refreshCameras, 1000);
+}
+			$(function() {
+    				setTimeout(refreshCamerasFirst, 1000);
+			});
+			function scrollSmoothToBottom (id) {
+			   var div = document.getElementById(id);
+			   $('#' + id).animate({
+				  scrollTop: div.scrollHeight - div.clientHeight
+			   }, 500);
+			}
+		</script>
+	</head>
+	<body>
+        <div><input type="button" class="simulate" id="simulation" value="simulate"><br/><div class="myDiv" id="news">Action Log <br/></div></div>
+
+
+		<div class='cameras'> 
+			<div class='camera'> 
+			  <h4><input type="checkbox" class="check" value="hallway"> Hallway</h4>
+			  <img height='240' id="hallway" src='{{ url_for('static', filename = 'security_images/hallway.jpg') }}' width='320'>
+			</div> 
+			<div class='camera'> 
+			  <h4><input type="checkbox" class="check" value="lubby"> Lubby</h4>
+			  <img height='240' id="lubby" src='{{ url_for('static', filename = 'security_images/lubby.jpg') }}' width='320'>
+			</div> 
+		</div>
+		<div class='cameras'>
+			<div class='camera'>
+				<h4><input type="checkbox" class="check" value="office"> Office</h4>
+				<img height='240' id="office" src='{{ url_for('static', filename = 'security_images/office.jpg') }}' width='320'>
+			</div>
+			<div class='camera'>
+				<h4><input type="checkbox" class="check" value="reception"> Reception</h4>
+				<img height='240' id="reception" src='{{ url_for('static', filename = 'security_images/reception.jpg') }}' width='320'>
+			</div>
+			</div>
+	<script>
+		$('.check').on('change', function() {
+ 		   	listvalues = $('.check:checked').toArray().map(x => x.value).join(', ');
+ 		   	var d = new Date();
+		   	$('#news').append("<b>Activated @"+ d.toLocaleTimeString().toLowerCase() + "</b><br/> "+ listvalues +"</p>" );
+		   	$('.check').parent().css( "background-color", "" );
+		   	$('.check:checked').parent().css( "background-color", "red" );
+		});
+		$( "#simulation" ).click(function() {
+			var d = new Date();
+		  if(listvalues.indexOf('hallway')==0){
+		  	$('#news').append("<b>Simulation started @"+ d.toLocaleTimeString().toLowerCase() + "</b></p>" );
+		  	checkImage = true;
+		  	var jqxhr = $.get( "/simulate", function() {
+						})
+						  .done(function() {
+							d = new Date();$('#news').append("<b>Simulation finished@"+ d.toLocaleTimeString().toLowerCase() + "</b></p>" );
+						  })
+						  .fail(function() {
+							d = new Date();$('#news').append("<b>Simulation failed@"+ d.toLocaleTimeString().toLowerCase() + "</b></p>" );
+						  })
+						  .always(function() {
+							scrollSmoothToBottom('news');
+							checkImage = false;
+						  });
+		  	d = new Date();
+
+		  }else{
+		  	alert("Hallway is not blocked!");
+		  	$('#news').append("<b>Simulation failure@"+ d.toLocaleTimeString().toLowerCase() + "</b></p>" );scrollSmoothToBottom('news');
+		  }
+		});
+	</script>
+	</body>
+</html>
