@@ -33,7 +33,7 @@
   				$('.camera img').attr('src', function(i, old) { return old.replace(/\?.+/,"?i=" + (Math.random()*1000)); });
 		  	 	$.get('/compareHallway', function(responseText) {
 		  	 		obj = jQuery.parseJSON(responseText);
-					$('#news').append(obj.resultMessage+"<br/>");
+					$('#news').append(obj.data.resultMessage+"<br/>");
 				});
   				$('#news').append("* Checking<br/>" );
   			}
