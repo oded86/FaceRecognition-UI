@@ -31,6 +31,9 @@
 			function refreshCameras() {
 			if (checkImage == true){
   				$('.camera img').attr('src', function(i, old) { return old.replace(/\?.+/,"?i=" + (Math.random()*1000)); });
+		  	 	$.get('/compareHallway', function(responseText) {
+					$('#news').append(responseText+"<br/>");
+				});
   				$('#news').append("* Checking<br/>" );
   			}
 				//$('.camera img').attr('src', function(i, old) { return old.replace(/\?.+/,"?i=" + (Math.random()*1000)); });

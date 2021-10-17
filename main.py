@@ -28,10 +28,7 @@ def simulate():
 @app.route('/compareHallway')
 def compare():
     conn = http.client.HTTPSConnection("face-verification2.p.rapidapi.com")
-    src1 = "https://www.20il.co.il/wp-content/uploads/2020/08/F190227NIFF03-1536x1060.jpg"
-    src2 = "https://www.20il.co.il/wp-content/uploads/2020/08/F190227NIFF03-1536x1060.jpg?d=s"
-   # payload = 'linkFile1=' + urllib.parse.quote(src1) + '&linkFile=' + urllib.parse.quote(src2)
-    payload = "linkFile1=https%3A%2F%2Fincontrol-sys.com%2FFaceRecognition%2Fimages%2Fhallway.jpg&linkFile2=https%3A%2F%2Fincontrol-sys.com%2FFaceRecognition%2Fprisoners%2Fitzik.jpg"
+    payload = "linkFile1=https%3A%2F%2Fincontrol-sys.com%2FFaceRecognition%2Fsecurity_images%2Fhallway.jpg&linkFile2=https%3A%2F%2Fincontrol-sys.com%2FFaceRecognition%2Fprisoners%2Fitzik.jpg"
     headers = {
         'content-type': "application/x-www-form-urlencoded",
         'x-rapidapi-host': "face-verification2.p.rapidapi.com",
@@ -50,4 +47,4 @@ def index():
     return render_template('index.html', title='Security Webcams')
 
 
-app.run(port=81)
+app.run(host='0.0.0.0', port=8040)
