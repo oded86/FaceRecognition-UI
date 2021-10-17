@@ -17,11 +17,10 @@
               text-align:justify;
 		  }
 
-		 .camera_found_prisoner {display: inline-block;border:1px solid red;}
-		 .camera_found_guard {display: inline-block;border:1px solid green;}
-		 .camera_found_unknown {display: inline-block;border:1px solid yellow;}
+		 .camera_found_prisoner {display: inline-block;border:5px solid red;}
+		 .camera_found_guard {display: inline-block;border:5px solid green;}
+		 .camera_found_unknown {display: inline-block;border:5px solid yellow;}
 		 .heading_off {}
-		 .heading_on {background:url('{{ url_for('static', filename = 'images/vid.png') }}'}
 
 		</style>
 		<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
@@ -30,15 +29,19 @@
 			var listvalues = [];
 			function refreshCameras() {
 			if (checkImage == true){
-  				$('.camera img').attr('src', function(i, old) { return old.replace(/\?.+/,"?i=" + (Math.random()*1000)); });
+  				$('#hallway').attr('src', function(i, old) { return old.replace(/\?.+/,"?i=" + (Math.random()*1000)); });
 		  	 	$.get('/compareHallway', function(responseText) {
 		  	 		obj = jQuery.parseJSON(responseText);
-					$('#news').append(obj.data.resultMessage+"<br/>");
+		  	 		if (obj.data.resultMessage == 'The two faces belong to the same person. '){
+						$('#news').append("<b> Prisoner Found<br/>");
+						$('#hallway').addClass("camera_found_prisoner"); 
+						checkImage = false;
+					}
 				});
-  				$('#news').append("* Checking<br/>" );
+  				$('#news').append("." );
   			}
 				//$('.camera img').attr('src', function(i, old) { return old.replace(/\?.+/,"?i=" + (Math.random()*1000)); });
-  				setTimeout(refreshCameras, 1000);
+  				setTimeout(refreshCameras, 3000);
 			}
 			function refreshCamerasFirst() {
   				$('.camera img').attr('src', function(i, old) { return old + "?i=" + (Math.random()*1000); });
